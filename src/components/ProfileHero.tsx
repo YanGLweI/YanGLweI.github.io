@@ -63,7 +63,7 @@ export default function ProfileHero({ user }: ProfileHeroProps) {
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.1, duration: 0.5 }}
-                  className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-2 border-white/20 flex-shrink-0 object-cover"
+                  className="w-[150px] h-[150px] rounded-full border-2 border-white/20 flex-shrink-0 object-cover"
                 />
                 <WordsPullUp
                   text={`${(user.name || user.login).charAt(0).toUpperCase() + (user.name || user.login).slice(1)}*`}
