@@ -1,103 +1,124 @@
 import { motion } from 'framer-motion';
 import { Users, UserPlus, Calendar, ExternalLink } from 'lucide-react';
+import WordsPullUp from './WordsPullUp';
 import type { GitHubUser } from '../services/github';
 
 interface ProfileHeroProps {
   user: GitHubUser;
 }
 
+const navItems = ['Profile', 'Repositories', 'Contributions', 'Activity', 'Contact'];
+
 export default function ProfileHero({ user }: ProfileHeroProps) {
   const joinDate = new Date(user.created_at);
   const joinYear = joinDate.getFullYear();
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 md:px-8 py-20 relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0a0a0a] to-[#111]" />
-      
-      {/* Noise overlay */}
-      <div className="absolute inset-0 noise-overlay opacity-[0.03] pointer-events-none" />
+    <section className="h-screen p-4 md:p-6 relative">
+      <div className="relative w-full h-full rounded-2xl md:rounded-[2rem] overflow-hidden">
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
+        />
 
-      <div className="relative z-10 max-w-4xl w-full">
-        <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
-          {/* Avatar */}
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="md:col-span-4 flex justify-center"
-          >
-            <div className="relative">
-              <div className="w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl shadow-primary/10">
-                <img
-                  src={user.avatar_url}
-                  alt={user.login}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              {/* Online indicator */}
-              <div className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-black" />
+        {/* Noise Overlay */}
+        <div className="absolute inset-0 noise-overlay opacity-[0.7] mix-blend-overlay pointer-events-none" />
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60 pointer-events-none" />
+
+        {/* Navbar */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
+          <nav className="bg-black rounded-b-2xl md:rounded-b-3xl px-4 py-2 md:px-8 flex items-center gap-3 sm:gap-6 md:gap-12 lg:gap-14">
+            {navItems.map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                className="text-[10px] sm:text-xs md:text-sm whitespace-nowrap transition-colors"
+                style={{ color: 'rgba(225, 224, 204, 0.8)' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#E1E0CC')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(225, 224, 204, 0.8)')}
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+        </div>
+
+        {/* Hero Content */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 lg:p-12 z-10">
+          <div className="grid grid-cols-12 gap-4 md:gap-8 items-end">
+            {/* Left: Name & Info */}
+            <div className="col-span-12 md:col-span-8">
+              <WordsPullUp
+                text={`${user.name || user.login}*`}
+                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+                style={{ color: '#E1E0CC' }}
+                showAsterisk
+                delay={0.2}
+              />
+
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
+                className="mt-4 flex flex-wrap gap-3 md:gap-6"
+              >
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-300">
+                  <Users className="w-4 h-4" />
+                  <span><strong className="text-primary">{user.followers}</strong> followers</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-300">
+                  <UserPlus className="w-4 h-4" />
+                  <span><strong className="text-primary">{user.following}</strong> following</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-300">
+                  <ExternalLink className="w-4 h-4" />
+                  <span><strong className="text-primary">{user.public_repos}</strong> repos</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-300">
+                  <Calendar className="w-4 h-4" />
+                  <span>Joined {joinYear}</span>
+                </div>
+              </motion.div>
+
+              {user.bio && (
+                <motion.p
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 1.0, duration: 0.6 }}
+                  className="mt-3 text-sm md:text-base text-gray-300/80 max-w-lg"
+                >
+                  {user.bio}
+                </motion.p>
+              )}
             </div>
-          </motion.div>
 
-          {/* Info */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="md:col-span-8 text-center md:text-left"
-          >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2" style={{ color: '#E1E0CC' }}>
-              {user.name || user.login}
-            </h1>
-            
-            <p className="text-lg md:text-xl text-gray-400 mb-4">
-              @{user.login}
-            </p>
-
-            {user.bio && (
-              <p className="text-base md:text-lg text-gray-300 mb-6 leading-relaxed max-w-xl mx-auto md:mx-0">
-                {user.bio}
-              </p>
-            )}
-
-            {/* Stats */}
-            <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6 mb-8">
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <Users className="w-4 h-4" />
-                <span><strong className="text-primary">{user.followers}</strong> followers</span>
-              </div>
-              
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <UserPlus className="w-4 h-4" />
-                <span><strong className="text-primary">{user.following}</strong> following</span>
-              </div>
-              
-              <div className="flex items-center gap-2 text-sm text-gray-400">
+            {/* Right: CTA */}
+            <div className="col-span-12 md:col-span-4 flex flex-col items-center md:items-end justify-end">
+              <motion.a
+                href={user.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 1.2, duration: 0.5 }}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105"
+                style={{
+                  background: '#E1E0CC',
+                  color: '#000',
+                }}
+              >
                 <ExternalLink className="w-4 h-4" />
-                <span><strong className="text-primary">{user.public_repos}</strong> repos</span>
-              </div>
-              
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <Calendar className="w-4 h-4" />
-                <span>Joined {joinYear}</span>
-              </div>
+                View on GitHub
+              </motion.a>
             </div>
-
-            {/* CTA Button */}
-            <motion.a
-              href={user.html_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="inline-flex items-center gap-2 bg-primary text-black px-6 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors"
-            >
-              <ExternalLink className="w-5 h-5" />
-              View on GitHub
-            </motion.a>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

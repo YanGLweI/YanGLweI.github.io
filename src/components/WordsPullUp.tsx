@@ -6,9 +6,10 @@ interface WordsPullUpProps {
   className?: string;
   showAsterisk?: boolean;
   style?: React.CSSProperties;
+  delay?: number;
 }
 
-export default function WordsPullUp({ text, className = '', showAsterisk = false, style }: WordsPullUpProps) {
+export default function WordsPullUp({ text, className = '', showAsterisk = false, style, delay = 0 }: WordsPullUpProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true });
   const words = text.split(' ');
@@ -21,7 +22,7 @@ export default function WordsPullUp({ text, className = '', showAsterisk = false
           initial={{ y: 20, opacity: 0 }}
           animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
           transition={{
-            delay: i * 0.08,
+            delay: delay + i * 0.08,
             duration: 0.6,
             ease: [0.16, 1, 0.3, 1],
           }}
