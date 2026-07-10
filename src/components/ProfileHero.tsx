@@ -55,7 +55,7 @@ export default function ProfileHero({ user }: ProfileHeroProps) {
           <div className="grid grid-cols-12 gap-4 md:gap-8 items-end">
             {/* Left: Name & Info */}
             <div className="col-span-12 md:col-span-8">
-              <div className="flex items-center gap-4 md:gap-6">
+              <div className="flex items-end gap-4 md:gap-6">
                 {/* Avatar */}
                 <motion.img
                   src={user.avatar_url}
