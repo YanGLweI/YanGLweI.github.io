@@ -163,7 +163,7 @@ export default function Contributions({ contributions }: ContributionsProps) {
   const totalContributions = contributions.reduce((sum, day) => sum + day.contributionCount, 0);
 
   return (
-    <section ref={sectionRef} className="bg-black relative py-20 md:py-32 px-4 md:px-8">
+    <section id="contributions" ref={sectionRef} className="bg-black relative py-20 md:py-32 px-4 md:px-8">
       {/* Background video */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <video

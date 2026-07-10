@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, UserPlus, Calendar, ExternalLink } from 'lucide-react';
 import WordsPullUp from './WordsPullUp';
@@ -7,14 +8,45 @@ interface ProfileHeroProps {
   user: GitHubUser;
 }
 
-const navItems = ['Profile', 'Repositories', 'Contributions', 'Activity', 'Contact'];
+const navItems = [
+  { label: 'Profile', target: 'profile' },
+  { label: 'Repositories', target: 'repositories' },
+  { label: 'Contributions', target: 'contributions' },
+  { label: 'Activity', target: 'activity' },
+  { label: 'Contact', target: 'contact' },
+];
+
+const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, target: string) => {
+  e.preventDefault();
+  const el = document.getElementById(target);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    // 如果找不到目标元素，滚动到顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
 
 export default function ProfileHero({ user }: ProfileHeroProps) {
+  const [isSticky, setIsSticky] = useState(false);
   const joinDate = new Date(user.created_at);
   const joinYear = joinDate.getFullYear();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const section = document.getElementById('profile');
+      if (section) {
+        const threshold = section.offsetTop + parseInt(getComputedStyle(section).paddingTop);
+        setIsSticky(window.scrollY >= threshold);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section className="h-screen p-4 md:p-6 relative">
+    <section id="profile" className="h-screen pt-4 px-4 md:pt-6 md:px-6 relative">
       <div className="relative w-full h-full rounded-2xl md:rounded-[2rem] overflow-hidden">
         {/* Background Video */}
         <video
@@ -33,18 +65,19 @@ export default function ProfileHero({ user }: ProfileHeroProps) {
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60 pointer-events-none" />
 
         {/* Navbar */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
+        <div className={`${isSticky ? 'fixed top-0' : 'absolute top-0'} left-1/2 -translate-x-1/2 z-50`}>
           <nav className="bg-black rounded-b-2xl md:rounded-b-3xl px-4 py-2 md:px-8 flex items-center gap-3 sm:gap-6 md:gap-12 lg:gap-14">
             {navItems.map((item) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={item.label}
+                href={`#${item.target}`}
+                onClick={(e) => handleNavClick(e, item.target)}
                 className="text-[10px] sm:text-xs md:text-sm whitespace-nowrap transition-colors"
                 style={{ color: 'rgba(225, 224, 204, 0.8)' }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = '#E1E0CC')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(225, 224, 204, 0.8)')}
               >
-                {item}
+                {item.label}
               </a>
             ))}
           </nav>

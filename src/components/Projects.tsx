@@ -137,7 +137,7 @@ function ProjectCard({ repo, index }: ProjectCardProps) {
 
 export default function Projects({ repos }: ProjectsProps) {
   return (
-    <section className="min-h-screen bg-black relative py-20 md:py-32 px-4 md:px-8">
+    <section id="repositories" className="min-h-screen bg-black relative py-20 md:py-32 px-4 md:px-8">
       {/* Noise overlay */}
       <div className="absolute inset-0 bg-noise opacity-[0.15] pointer-events-none" />
 
