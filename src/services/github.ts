@@ -110,11 +110,14 @@ export async function getContributions(): Promise<ContributionDay[]> {
 
   const data = await response.json();
   
+  console.log('GraphQL Response:', JSON.stringify(data, null, 2));
+  
   if (data.errors) {
     console.error('GraphQL errors:', data.errors);
     throw new Error(data.errors[0]?.message || 'GraphQL error');
   }
 
   const weeks = data.data?.user?.contributionsCollection?.contributionCalendar?.weeks || [];
+  console.log('Contribution weeks count:', weeks.length);
   return weeks.flatMap((week: ContributionWeek) => week.contributionDays);
 }
