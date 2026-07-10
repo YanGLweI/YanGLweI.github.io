@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ProfileHero from './components/ProfileHero';
-import ContributionGraph from './components/ContributionGraph';
-import ProjectCard from './components/ProjectCard';
+import Contributions from './components/Contributions';
+import Projects from './components/Projects';
 import { getUserProfile, getUserRepos, getContributions } from './services/github';
 import type { GitHubUser, GitHubRepo, ContributionDay } from './services/github';
 
@@ -61,46 +61,17 @@ export default function App() {
 
   return (
     <main className="bg-black min-h-screen">
-      {/* Hero Section */}
+      {/* Hero Section - 个人资料 */}
       <ProfileHero user={user} />
 
-      {/* Contributions Section */}
-      <section className="px-4 md:px-8 py-16 md:py-24">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-8" style={{ color: '#E1E0CC' }}>
-            Activity Overview
-          </h2>
-          <ContributionGraph contributions={contributions} />
-        </div>
-      </section>
+      {/* Contributions Section - 贡献图 */}
+      <Contributions contributions={contributions} />
 
-      {/* Projects Section */}
-      <section className="px-4 md:px-8 py-16 md:py-24">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#E1E0CC' }}>
-              Featured Projects
-            </h2>
-            <a
-              href={`https://github.com/${user.login}?tab=repositories`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary text-sm hover:text-primary/70 transition-colors"
-            >
-              View all →
-            </a>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {repos.map((repo, index) => (
-              <ProjectCard key={repo.id} repo={repo} index={index} />
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Projects Section - 项目展示 */}
+      <Projects repos={repos} />
 
       {/* Footer */}
-      <footer className="px-4 md:px-8 py-12 border-t border-gray-800">
+      <footer className="px-4 md:px-8 py-12 border-t border-gray-800 bg-black">
         <div className="max-w-6xl mx-auto text-center text-gray-500 text-sm">
           <p>Built with React + Vite + Tailwind CSS</p>
           <p className="mt-2">© {new Date().getFullYear()} {user.name || user.login}. All rights reserved.</p>
