@@ -55,13 +55,24 @@ export default function ProfileHero({ user }: ProfileHeroProps) {
           <div className="grid grid-cols-12 gap-4 md:gap-8 items-end">
             {/* Left: Name & Info */}
             <div className="col-span-12 md:col-span-8">
-              <WordsPullUp
-                text={`${user.name || user.login}*`}
-                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
-                style={{ color: '#E1E0CC' }}
-                showAsterisk
-                delay={0.2}
-              />
+              <div className="flex items-center gap-4 md:gap-6">
+                {/* Avatar */}
+                <motion.img
+                  src={user.avatar_url}
+                  alt={user.name || user.login}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.1, duration: 0.5 }}
+                  className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-2 border-white/20 flex-shrink-0 object-cover"
+                />
+                <WordsPullUp
+                  text={`${(user.name || user.login).charAt(0).toUpperCase() + (user.name || user.login).slice(1)}*`}
+                  className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+                  style={{ color: '#E1E0CC' }}
+                  showAsterisk
+                  delay={0.2}
+                />
+              </div>
 
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
