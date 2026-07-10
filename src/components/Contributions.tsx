@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import type { ContributionDay } from '../services/github';
 
 interface ContributionsProps {
@@ -20,7 +20,9 @@ export default function Contributions({ contributions }: ContributionsProps) {
 
   const gridRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
   const [cellStep, setCellStep] = useState(MIN_CELL_STEP);
 
   // Group contributions by week
@@ -101,14 +103,14 @@ export default function Contributions({ contributions }: ContributionsProps) {
     return 4;
   };
 
-  // Color mapping based on GitHub's contribution colors
+  // Color mapping based on site cream palette
   const getColor = (level: number): string => {
     const colors = [
-      '#161b22', // Level 0 - dark
-      '#0e4429', // Level 1
-      '#006d32', // Level 2
-      '#26a641', // Level 3
-      '#39d353', // Level 4 - bright green
+      'rgba(225, 224, 204, 0.05)',  // Level 0 - near invisible
+      'rgba(225, 224, 204, 0.15)',  // Level 1
+      'rgba(225, 224, 204, 0.30)',  // Level 2
+      'rgba(225, 224, 204, 0.50)',  // Level 3
+      'rgba(225, 224, 204, 0.80)',  // Level 4 - bright cream
     ];
     return colors[level];
   };
@@ -161,21 +163,55 @@ export default function Contributions({ contributions }: ContributionsProps) {
   const totalContributions = contributions.reduce((sum, day) => sum + day.contributionCount, 0);
 
   return (
-    <section className="bg-black py-20 md:py-32 px-4 md:px-8">
-      <div className="bg-[#101010] rounded-2xl md:rounded-3xl max-w-6xl mx-auto px-6 md:px-12 lg:px-20 py-16 md:py-24">
+    <section ref={sectionRef} className="bg-black relative py-20 md:py-32 px-4 md:px-8">
+      {/* Background video */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260508_064122_c4750c0e-7476-4b44-94a2-a85a65c63bf2.mp4"
+          style={{ opacity: 0.4 }}
+        />
+      </div>
+
+      {/* Noise overlay */}
+      <div className="absolute inset-0 bg-noise opacity-[0.15] pointer-events-none" />
+
+      {/* SVG noise filter for shiny text */}
+      <svg className="absolute w-0 h-0" aria-hidden="true">
+        <filter id="c3-noise">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
+          <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0" />
+          <feComposite in2="SourceGraphic" operator="in" result="noise" />
+          <feBlend in="SourceGraphic" in2="noise" mode="multiply" />
+        </filter>
+      </svg>
+
+      <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
+          animate={isInView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-12 md:mb-16"
         >
           <span className="text-primary text-[10px] sm:text-xs uppercase tracking-wider block mb-4">
             Activity Overview
           </span>
           <h2
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] sm:leading-[0.9]"
-            style={{ color: '#E1E0CC' }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] sm:leading-[0.9] animate-shiny"
+            style={{
+              backgroundImage: 'linear-gradient(to right, #8a8778 0%, #E1E0CC 20%, #ffffff 50%, #E1E0CC 80%, #8a8778 100%)',
+              backgroundSize: '200% auto',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              color: 'transparent',
+              WebkitTextFillColor: 'transparent',
+              filter: 'url(#c3-noise)',
+            }}
           >
             {totalContributions.toLocaleString()} contributions
           </h2>
@@ -188,9 +224,9 @@ export default function Contributions({ contributions }: ContributionsProps) {
         <motion.div
           ref={cardRef}
           initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="bg-[#0d1117] rounded-xl p-4 md:p-6 border border-gray-800"
+          animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0.95, opacity: 0 }}
+          transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="bg-[#212121] rounded-2xl p-4 md:p-6"
         >
           <div ref={gridRef} className="relative">
               {/* Month labels */}
@@ -220,20 +256,22 @@ export default function Contributions({ contributions }: ContributionsProps) {
                 {/* Weeks */}
                 <div className="flex" style={{ gap: cellGap }}>
                   {weeks.map((week, weekIndex) => (
-                    <div key={weekIndex} className="flex flex-col" style={{ gap: cellGap }}>
+                    <div
+                      key={weekIndex}
+                      className="flex flex-col transition-opacity duration-500"
+                      style={{
+                        gap: cellGap,
+                        opacity: isInView ? 1 : 0,
+                        transitionDelay: `${weekIndex * 30}ms`,
+                      }}
+                    >
                       {week.map((day, dayIndex) => {
                         const level = getLevel(day.contributionCount);
                         const color = getColor(level);
 
                         return (
-                          <motion.div
-                            key={`${weekIndex}-${dayIndex}`}
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{
-                              delay: Math.min((weekIndex * 7 + dayIndex) * 0.0005, 1),
-                              duration: 0.1,
-                            }}
+                          <div
+                            key={dayIndex}
                             className="rounded-sm cursor-pointer hover:ring-1 hover:ring-white/50 transition-all"
                             style={{ width: cellSize, height: cellSize, backgroundColor: color }}
                             onMouseEnter={(e) => handleMouseEnter(e, day)}
@@ -246,15 +284,15 @@ export default function Contributions({ contributions }: ContributionsProps) {
                 </div>
               </div>
 
-              {/* GitHub-style Tooltip */}
+              {/* Tooltip */}
               {tooltip.visible && (
                 <div
                   ref={tooltipRef}
                   className="absolute z-50 pointer-events-none"
                   style={tooltipStyle}
                 >
-                  <div className="bg-[#1b1f23] text-white text-[11px] px-3 py-2 rounded-md whitespace-nowrap border border-[#30363d] shadow-lg">
-                    <strong className="font-semibold">
+                  <div className="bg-[#212121] text-[#E1E0CC] text-[11px] px-3 py-2 rounded-md whitespace-nowrap shadow-lg">
+                    <strong className="font-semibold text-primary">
                       {tooltip.count} contribution{tooltip.count !== 1 ? 's' : ''}
                     </strong>
                     {' on '}
@@ -262,7 +300,7 @@ export default function Contributions({ contributions }: ContributionsProps) {
                   </div>
                   {/* Arrow */}
                   <div className="flex justify-center -mt-[1px]">
-                    <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-[#1b1f23]" />
+                    <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[5px] border-t-[#212121]" />
                   </div>
                 </div>
               )}
