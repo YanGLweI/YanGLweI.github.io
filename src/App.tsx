@@ -16,14 +16,23 @@ export default function App() {
     async function fetchData() {
       try {
         setLoading(true);
-        const [userData, reposData, contributionsData] = await Promise.all([
+        // Fetch user and repos first (these work without token)
+        const [userData, reposData] = await Promise.all([
           getUserProfile(),
           getUserRepos(),
-          getContributions(),
         ]);
         setUser(userData);
         setRepos(reposData);
-        setContributions(contributionsData);
+
+        // Try to fetch contributions (requires token)
+        try {
+          const contributionsData = await getContributions();
+          setContributions(contributionsData);
+        } catch (contribErr) {
+          console.warn('Could not fetch contributions (token may be required):', contribErr);
+          setContributions([]); // Set empty array if contributions fail
+        }
+
         setError(null);
       } catch (err) {
         console.error('Failed to fetch GitHub data:', err);
