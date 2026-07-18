@@ -163,34 +163,35 @@ export default function Contributions({ contributions }: ContributionsProps) {
   const totalContributions = contributions.reduce((sum, day) => sum + day.contributionCount, 0);
 
   return (
-    <section id="contributions" ref={sectionRef} className="bg-black relative py-20 md:py-32 px-4 md:px-8">
-      {/* Background video */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-          src="/videos/contributions-bg.mp4"
-          style={{ opacity: 0.4 }}
-        />
-      </div>
+    <section id="contributions" ref={sectionRef} className="h-screen pt-4 px-4 md:pt-6 md:px-6 relative">
+      <div className="relative w-full h-full rounded-2xl md:rounded-[2rem] overflow-hidden bg-black">
+        {/* Background video */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+            src="/videos/contributions-bg.mp4"
+            style={{ opacity: 0.4 }}
+          />
+        </div>
 
-      {/* Noise overlay */}
-      <div className="absolute inset-0 bg-noise opacity-[0.15] pointer-events-none" />
+        {/* Noise overlay */}
+        <div className="absolute inset-0 bg-noise opacity-[0.15] pointer-events-none" />
 
-      {/* SVG noise filter for shiny text */}
-      <svg className="absolute w-0 h-0" aria-hidden="true">
-        <filter id="c3-noise">
-          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
-          <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0" />
-          <feComposite in2="SourceGraphic" operator="in" result="noise" />
-          <feBlend in="SourceGraphic" in2="noise" mode="multiply" />
-        </filter>
-      </svg>
+        {/* SVG noise filter for shiny text */}
+        <svg className="absolute w-0 h-0" aria-hidden="true">
+          <filter id="c3-noise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0" />
+            <feComposite in2="SourceGraphic" operator="in" result="noise" />
+            <feBlend in="SourceGraphic" in2="noise" mode="multiply" />
+          </filter>
+        </svg>
 
-      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="relative z-10 max-w-7xl mx-auto h-full flex flex-col justify-center">
         {/* Header */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
@@ -319,6 +320,7 @@ export default function Contributions({ contributions }: ContributionsProps) {
             <span>More</span>
           </div>
         </motion.div>
+        </div>
       </div>
     </section>
   );

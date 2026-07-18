@@ -74,7 +74,9 @@ export default function App() {
       <ProfileHero user={user} />
 
       {/* Contributions Section - 贡献图 */}
-      <Contributions contributions={contributions} />
+      <div className="py-4 md:py-6">
+        <Contributions contributions={contributions} />
+      </div>
 
       {/* Projects Section - 项目展示 */}
       <Projects repos={repos} />
