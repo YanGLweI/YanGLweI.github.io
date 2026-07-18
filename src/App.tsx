@@ -47,8 +47,10 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-primary text-lg animate-pulse">Loading...</div>
+      <div className="min-h-screen bg-black relative">
+        <div className="loader-wrapper">
+          <div className="loader" />
+        </div>
       </div>
     );
   }

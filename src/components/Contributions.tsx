@@ -106,11 +106,11 @@ export default function Contributions({ contributions }: ContributionsProps) {
   // Color mapping based on site cream palette
   const getColor = (level: number): string => {
     const colors = [
-      'rgba(225, 224, 204, 0.05)',  // Level 0 - near invisible
-      'rgba(225, 224, 204, 0.15)',  // Level 1
-      'rgba(225, 224, 204, 0.30)',  // Level 2
-      'rgba(225, 224, 204, 0.50)',  // Level 3
-      'rgba(225, 224, 204, 0.80)',  // Level 4 - bright cream
+      'rgba(45, 45, 50, 0.6)',     // Level 0 - subtle dark
+      'rgba(88, 166, 140, 0.5)',   // Level 1 - muted teal
+      'rgba(72, 199, 142, 0.65)',  // Level 2 - sage green
+      'rgba(56, 217, 169, 0.8)',   // Level 3 - bright mint
+      'rgba(34, 230, 160, 1)',     // Level 4 - vibrant emerald
     ];
     return colors[level];
   };

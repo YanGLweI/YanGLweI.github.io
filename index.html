@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="background:#000">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -9,9 +9,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
+    <style>
+      body{background:#000;margin:0;overflow-x:hidden}
+      .loader{position:relative;width:2.5em;height:2.5em;transform:rotate(165deg)}
+      .loader:before,.loader:after{content:"";position:absolute;top:50%;left:50%;display:block;width:.5em;height:.5em;border-radius:.25em;transform:translate(-50%,-50%)}
+      .loader:before{animation:before8 2s infinite}
+      .loader:after{animation:after6 2s infinite}
+      @keyframes before8{0%{width:.5em;box-shadow:1em -.5em rgba(225,224,204,.75),-1em .5em rgba(111,202,220,.75)}35%{width:2.5em;box-shadow:0 -.5em rgba(225,224,204,.75),0 .5em rgba(111,202,220,.75)}70%{width:.5em;box-shadow:-1em -.5em rgba(225,224,204,.75),1em .5em rgba(111,202,220,.75)}100%{box-shadow:1em -.5em rgba(225,224,204,.75),-1em .5em rgba(111,202,220,.75)}}
+      @keyframes after6{0%{height:.5em;box-shadow:.5em 1em rgba(61,184,143,.75),-.5em -1em rgba(233,169,32,.75)}35%{height:2.5em;box-shadow:.5em 0 rgba(61,184,143,.75),-.5em 0 rgba(233,169,32,.75)}70%{height:.5em;box-shadow:.5em -1em rgba(61,184,143,.75),-.5em 1em rgba(233,169,32,.75)}100%{box-shadow:.5em 1em rgba(61,184,143,.75),-.5em -1em rgba(233,169,32,.75)}}
+      #root{position:relative;min-height:100vh}
+      .loader-center{position:absolute;top:calc(50% - 1.25em);left:calc(50% - 1.25em)}
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loader-center"><div class="loader"></div></div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
