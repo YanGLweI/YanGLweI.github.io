@@ -10,8 +10,8 @@ interface ProfileHeroProps {
 
 const navItems = [
   { label: 'Profile', target: 'profile' },
-  { label: 'Repositories', target: 'repositories' },
   { label: 'Contributions', target: 'contributions' },
+  { label: 'Repositories', target: 'repositories' },
   { label: 'Activity', target: 'activity' },
   { label: 'Contact', target: 'contact' },
 ];
