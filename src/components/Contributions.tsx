@@ -108,14 +108,14 @@ export default function Contributions({ contributions }: ContributionsProps) {
     return 4;
   };
 
-  // Color mapping - GitHub official color palette
+  // Color mapping - GitHub green palette with custom background for level 0
   const getColor = (level: number): string => {
     const colors = [
-      '#ebedf0',        // Level 0 - gray (no contributions)
-      '#9be9a8',        // Level 1 - light green (1-2 contributions relative to max)
-      '#40c463',        // Level 2 - medium green (3-5 contributions relative to max)
-      '#30a14e',        // Level 3 - dark green (6-9 contributions relative to max)
-      '#21663d',        // Level 4 - darkest green (10+ contributions relative to max)
+      'rgba(45, 45, 50, 0.6)',     // Level 0 - subtle dark (custom)
+      '#9be9a8',                    // Level 1 - light green (1-2 contributions relative to max)
+      '#40c463',                    // Level 2 - medium green (3-5 contributions relative to max)
+      '#30a14e',                    // Level 3 - dark green (6-9 contributions relative to max)
+      '#21663d',                    // Level 4 - darkest green (10+ contributions relative to max)
     ];
     return colors[level];
   };
