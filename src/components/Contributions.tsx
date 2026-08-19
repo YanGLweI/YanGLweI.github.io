@@ -94,12 +94,17 @@ export default function Contributions({ contributions }: ContributionsProps) {
     }
   });
 
-  // Calculate contribution level (0-4)
+  // Calculate max contribution count across all days
+  const maxContribution = Math.max(...contributions.map(d => d.contributionCount), 0);
+
+  // Calculate contribution level (0-4) based on GitHub's relative percentage scale
+  // r = count / maxContribution where r determines the color intensity
   const getLevel = (count: number): number => {
     if (count === 0) return 0;
-    if (count <= 2) return 1;
-    if (count <= 5) return 2;
-    if (count <= 8) return 3;
+    const ratio = count / maxContribution;
+    if (ratio <= 0.25) return 1;
+    if (ratio <= 0.50) return 2;
+    if (ratio <= 0.75) return 3;
     return 4;
   };
 
