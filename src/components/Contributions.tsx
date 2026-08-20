@@ -108,14 +108,14 @@ export default function Contributions({ contributions }: ContributionsProps) {
     return 4;
   };
 
-  // Color mapping - GitHub green palette with custom background for level 0
+  // Color mapping based on site cream palette
   const getColor = (level: number): string => {
     const colors = [
-      'rgba(45, 45, 50, 0.6)',     // Level 0 - subtle dark (custom)
-      '#9be9a8',                    // Level 1 - light green (1-2 contributions relative to max)
-      '#40c463',                    // Level 2 - medium green (3-5 contributions relative to max)
-      '#30a14e',                    // Level 3 - dark green (6-9 contributions relative to max)
-      '#21663d',                    // Level 4 - darkest green (10+ contributions relative to max)
+      'rgba(45, 45, 50, 0.6)',     // Level 0 - subtle dark
+      'rgba(88, 166, 140, 0.5)',   // Level 1 - muted teal
+      'rgba(72, 199, 142, 0.65)',  // Level 2 - sage green
+      'rgba(56, 217, 169, 0.8)',   // Level 3 - bright mint
+      'rgba(34, 230, 160, 1)',     // Level 4 - vibrant emerald
     ];
     return colors[level];
   };
